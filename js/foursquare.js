@@ -9,13 +9,10 @@ function artsyContent(itemlat, itemlng) {
     var allTheArt = $('#list');
     // URL retrieved from Foursquare API
     allTheArt.text("");
-
     var begUrl = 'https://api.foursquare.com/v2/venues/explore?ll=';
     var artsOnly = '&section=arts';
     var endUrl = '&client_id=CBIVLNR1NJKAFCBVDSOPVUTNX4WMB3CQMK11NPLWFFIBMQUM&client_secret=QKZM2PG05VO55QNGVUUOBXITOURPII5NPDXY51U3S3VL22LC&v=20170130';
-
     var fsUrl = begUrl + itemlat + ',' + itemlng + artsOnly + endUrl;
-    console.log(fsUrl);
     // Function to get the list display under the title
     $.getJSON(fsUrl, function (data) {
         var allArtsyVenues = data.response.groups[0].items;

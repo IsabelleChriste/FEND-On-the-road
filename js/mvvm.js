@@ -6,7 +6,6 @@ var marker;
 var google;
 var markers = [];
 var defaultIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|1CBECC';
-var hoverIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF3DAE';
 var clickedIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFA500';
 // -------------- Map -----------//
 function initMap() {
@@ -456,12 +455,9 @@ function initMap() {
         styles: style,
         mapTypeControl: true
     });
-    map.addListener('click', function () {
-        infowindow.close();
-    });
 }
 // -------------- Model of towns -----------//
-var townModel = function (data) {
+var TownModel = function (data) {
     var self = this;
     self.name = data.name;
     self.state = data.state;
@@ -528,22 +524,21 @@ var town = [
     }
 ];
 // ------ TownsViewModel----------//
-var townsViewModel = function () {
+var TownsViewModel = function () {
     var self = this;
     // data of the towns
     self.townList = ko.observableArray([]);
     // Towns shown on screen by default
     town.forEach(function (item) {
-        self.townList.push(new townModel(item));
+        self.townList.push(new TownModel(item));
     });
-    // Associating markers to each town
+    
     self.townList().forEach(function (place) {
         var marker = new google.maps.Marker({
             position: place.location,
             map: map,
             title: place.name,
             icon: defaultIcon,
-            hovericon: hoverIcon,
             clickedicon: clickedIcon,
             lat: place.location.lat,
             lng: place.location.lng,
@@ -572,31 +567,28 @@ var townsViewModel = function () {
             populateInfoWindow(this, infowindow);
             infowindow.open(map, marker);
             getWeather(marker.lat, marker.lng);
-            marker.setIcon(clickedIcon);
+            //marker.setIcon(clickedIcon);
+            artsyContent(marker.lat, marker.lng);
         });
-    });
-    console.log(markers);
-    markers.forEach(function () {
-
     });
     // When town is clicked, before or after filtering, 
     // it shows foursquare API details underneath, change of 
     // marker color and opening of infowindow
-    self.townInformation = ko.observable("");
-    self.currentHero = ko.observable("");
+    self.townInformation = ko.observable('');
     self.townList().forEach(function (place) {
         this.townInformation = function (heroes) {
+            var contentement = '<div class="contentement">' + 'Right now in ' + heroes.title + ' the weather description says: ' + '<ul id="weather">' + '</ul>' + '</div>';
             artsyContent(heroes.location.lat, heroes.location.lng);
-            // infowindow.setContent(heroes.name);
-            //infowindow.open(map, heroes.marker);
-            //getWeather(heroes.lat, heroes.lng);
-        }
+            infowindow.setContent(contentement);
+            infowindow.open(map, heroes.marker);
+            getWeather(heroes.lat, heroes.lng);
+        };
     });
     // Setting of filtering by states
     // filters are states
     self.states = ko.observableArray(["All", "Texas", "Missouri", "Colorado", "New Mexico"]);
     // value is filter
-    self.filter = ko.observable("");
+    self.filter = ko.observable('');
     // items are town, shows towns filtered and their markers
     self.filterTown = ko.computed(function () {
         var filter = self.filter();
@@ -605,6 +597,7 @@ var townsViewModel = function () {
                 item.marker.setVisible(true);
             });
             artsyContent(undefined);
+            infowindow.close();
             return self.townList();
         } else {
             return ko.utils.arrayFilter(self.townList(), function (z) {
@@ -620,5 +613,5 @@ var townsViewModel = function () {
 };
 //ko.applyBindings(new townsViewModel());
 $(document).ready(function () {
-    ko.applyBindings(townsViewModel);
+    ko.applyBindings(TownsViewModel);
 });
