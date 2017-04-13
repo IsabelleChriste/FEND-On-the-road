@@ -532,7 +532,8 @@ var TownsViewModel = function () {
     town.forEach(function (item) {
         self.townList.push(new TownModel(item));
     });
-    
+
+
     self.townList().forEach(function (place) {
         var marker = new google.maps.Marker({
             position: place.location,
@@ -546,8 +547,20 @@ var TownsViewModel = function () {
         });
         place.marker = marker;
         markers.push(marker);
-
+        
         // default icon is blue
+
+        function resetMarker(soup) {
+            for (var b = 0; b < soup.length; b++) {
+                if (soup[b].icon != defaultIcon) {
+                    soup[b].setIcon(defaultIcon);
+                    console.log(soup.length);
+                } else {
+                    marker.setIcon(clickedIcon);
+                    console.log("not");
+                }
+            }
+        }
 
         // Setting content for infowindow to be changed
 
@@ -567,10 +580,13 @@ var TownsViewModel = function () {
             populateInfoWindow(this, infowindow);
             infowindow.open(map, marker);
             getWeather(marker.lat, marker.lng);
+            //clickIcon(marker, marker.icon);
+            resetMarker(markers);
             //marker.setIcon(clickedIcon);
             artsyContent(marker.lat, marker.lng);
         });
     });
+
     // When town is clicked, before or after filtering, 
     // it shows foursquare API details underneath, change of 
     // marker color and opening of infowindow
@@ -596,7 +612,7 @@ var TownsViewModel = function () {
             self.townList().forEach(function (item) {
                 item.marker.setVisible(true);
             });
-            artsyContent(undefined);
+            //artsyContent(null);
             infowindow.close();
             return self.townList();
         } else {

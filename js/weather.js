@@ -1,4 +1,4 @@
-/* Get the weather from Open Weather Map API */ 
+//Get the weather from Open Weather Map API 
 function getWeather(itemlat, itemlng) {
     var storm = $('#weather');
     storm.text("");
@@ -9,7 +9,6 @@ function getWeather(itemlat, itemlng) {
     $.getJSON(weatherUrl, function (data) {
         var currentweather = data.weather[0].main;
         storm.append(currentweather);
-        console.log(data.weather[0].main);
     }).fail(function (json) {
         $("#weather").text('Weather not available!');
     });
