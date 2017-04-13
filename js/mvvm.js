@@ -554,37 +554,32 @@ var TownsViewModel = function () {
             for (var b = 0; b < soup.length; b++) {
                 if (soup[b].icon != defaultIcon) {
                     soup[b].setIcon(defaultIcon);
-                    console.log(soup.length);
+                    console.log(soup[b].title);
                 } else {
                     marker.setIcon(clickedIcon);
                     console.log("not");
                 }
             }
         }
-
         // Setting content for infowindow to be changed
 
         this.infowindow = new google.maps.InfoWindow();
-        var contentement = '<div class="contentement">' + 'Right now in ' + marker.title + ' the weather description says: ' + '<ul id="weather">' + '</ul>' + '</div>';
-
         function populateInfoWindow(marker, infowindow) {
             if (infowindow.marker != marker) {
                 infowindow.marker = marker;
-                infowindow.setContent(contentement);
                 infowindow.setPosition(this.marker);
                 infowindow.open(map, marker);
             }
         }
         // Opening of infowindow
         marker.addListener('click', function () {
+            getWeather(marker.lat, marker.lng);
             populateInfoWindow(this, infowindow);
             infowindow.open(map, marker);
-            getWeather(marker.lat, marker.lng);
-            //clickIcon(marker, marker.icon);
             resetMarker(markers);
-            //marker.setIcon(clickedIcon);
             artsyContent(marker.lat, marker.lng);
         });
+        
     });
 
     // When town is clicked, before or after filtering, 
@@ -593,11 +588,9 @@ var TownsViewModel = function () {
     self.townInformation = ko.observable('');
     self.townList().forEach(function (place) {
         this.townInformation = function (heroes) {
-            var contentement = '<div class="contentement">' + 'Right now in ' + heroes.title + ' the weather description says: ' + '<ul id="weather">' + '</ul>' + '</div>';
-            artsyContent(heroes.location.lat, heroes.location.lng);
-            infowindow.setContent(contentement);
-            infowindow.open(map, heroes.marker);
             getWeather(heroes.lat, heroes.lng);
+            artsyContent(heroes.location.lat, heroes.location.lng);
+            infowindow.open(map, heroes.marker);
         };
     });
     // Setting of filtering by states
@@ -609,10 +602,10 @@ var TownsViewModel = function () {
     self.filterTown = ko.computed(function () {
         var filter = self.filter();
         if (!filter || filter == "All") {
+            artsyContent("");
             self.townList().forEach(function (item) {
                 item.marker.setVisible(true);
             });
-            //artsyContent(null);
             infowindow.close();
             return self.townList();
         } else {
