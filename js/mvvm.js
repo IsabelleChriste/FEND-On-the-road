@@ -11,8 +11,8 @@ var clickedIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld
 function initMap() {
     // Center of the map
     var mapcenter = {
-        lat: 35.506435,
-        lng: -100.045742,
+        lat: 34.200532,
+        lng:  -98.0646662,
     };
     var style = [
         {
@@ -521,7 +521,7 @@ var town = [
             lng: -97.476992
         },
         visible: ko.observable(true)
-    }
+    },
 ];
 // ------ TownsViewModel----------//
 var TownsViewModel = function () {
@@ -551,13 +551,11 @@ var TownsViewModel = function () {
         // default icon is blue
 
         function resetMarker(soup) {
-            for (var b = 0; b < soup.length; b++) {
+            for (var b = 0; b < markers.length; b++) {
                 if (soup[b].icon != defaultIcon) {
                     soup[b].setIcon(defaultIcon);
-                    console.log(soup[b].title);
                 } else {
                     marker.setIcon(clickedIcon);
-                    console.log("not");
                 }
             }
         }
@@ -581,16 +579,20 @@ var TownsViewModel = function () {
         });
         
     });
-
+    
     // When town is clicked, before or after filtering, 
     // it shows foursquare API details underneath, change of 
-    // marker color and opening of infowindow
-    self.townInformation = ko.observable('');
+    // marker color and opening of infowindow   
+    self.artContentList = ko.observableArray('');
+    var artName = ko.observable('');
+    
+    self.townInformation = ko.observable(''); 
     self.townList().forEach(function (place) {
         this.townInformation = function (heroes) {
             getWeather(heroes.lat, heroes.lng);
             artsyContent(heroes.location.lat, heroes.location.lng);
             infowindow.open(map, heroes.marker);
+            //resetMarker(markers);
         };
     });
     // Setting of filtering by states
@@ -602,7 +604,6 @@ var TownsViewModel = function () {
     self.filterTown = ko.computed(function () {
         var filter = self.filter();
         if (!filter || filter == "All") {
-            artsyContent("");
             self.townList().forEach(function (item) {
                 item.marker.setVisible(true);
             });

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +11,7 @@
     <link href="css/style.css" rel="stylesheet" media="only screen and (min-width: 769px)">
     <title>Minimalist Map</title>
 </head>
+
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -33,7 +35,8 @@
                 </div>
                 <h4 id="museum">Click on the town above to see a selection of their wonderful art places: </h4>
                 <div>
-                    <ul id="list">
+                    <ul id="list" data-bind="foreach: artContentList">
+                        <li data-bind="text: $data.artname"></li>
                     </ul>
                     <h2 id="errormessage"></h2>
                 </div>
@@ -53,6 +56,9 @@
     <script async defer src="js/weather.js"></script>
     <script src="js/mvvm.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4zMh2canYVv-MV5G0pOm15sSxL8yxl7g&callback=initMap">
+
+
     </script>
 </body>
+
 </html>
