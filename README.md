@@ -6,9 +6,13 @@ The town were chosen as they are mentionned in the diaries of Susan Shelby Magof
 
 ## Install and Run
 
-Download or clone the project from:
-[Link]()
-Open it on your favorite browser.
+You can download this project from this link: [Link](https://github.com/IsabelleChriste/FEND-On-the-road)
+* Save to your desktop for example. 
+* Unzip the file. 
+* Once it is unzipped, open this file.
+* Right click on the HTML page called view.html and choose Open With, then click on your browser.
+
+Please note, you'll need Internet access to see the map and the markers.
 
 Project has been tested on these browser:
 
