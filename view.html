@@ -55,8 +55,23 @@
     <script src="js/knockout-3.4.2.js"></script>
     <script async defer src="js/foursquare.js"></script>
     <script async defer src="js/weather.js"></script>
+    
+    
+    <script>
+        function noMap() {
+            alert("alert2: Map is unavailable");
+        }
+        function yesMap() {
+            if (typeof google !== 'undefined' || typeof google !== null) {
+                initMap();
+            } else {
+                alert("alert1: Map is unavailable");
+            }
+        }
+    </script>
+    
     <script src="js/mvvm.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4zMh2canYVv-MV5G0pOm15sSxL8yxl7g&callback=initMap">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4zMh2canYVv-MV5G0pOm15sSxL8yxl7g&callback=yesMap" onerror="noMap()">
 
 
     </script>
